@@ -7,18 +7,18 @@ import "./Popup.scss";
 export default function Popup() {
   const [workspaceIdUrl, setWorkspaceIdUrl] = React.useState("");
   const [appSlackUrl, setAppSlackUrl] = React.useState("");
-  const [baseSlackUrl, setBaseSlackUrl] = React.useState("");
+  const [clientBaseSlackUrl, setClientBaseSlackUrl] = React.useState("");
 
   const onClickApply = () => {
-    chrome.storage.sync.set({ 'baseSlackUrl': baseSlackUrl });
+    chrome.storage.sync.set({ 'clientBaseSlackUrl': clientBaseSlackUrl });
   };
 
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
     chrome.runtime.sendMessage({ popupMounted: true });
 
-    chrome.storage.sync.get(['baseSlackUrl'], (result) => {
-      setBaseSlackUrl(result.baseSlackUrl);
+    chrome.storage.sync.get(['clientBaseSlackUrl'], (result) => {
+      setClientBaseSlackUrl(result.clientBaseSlackUrl);
     });
   }, []);
 
@@ -26,7 +26,7 @@ export default function Popup() {
     <div className="popupContainer">
       <div className="flex">
         <TextField
-          id="workspace-id-slack-com-textfield"
+          id="workspace-url-textfield"
           label="<workspace_id>.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
@@ -43,7 +43,7 @@ export default function Popup() {
       </div>
       <div className="flex">
         <TextField
-          id="app-slack-com-textfield"
+          id="client-url-textfield"
           label="app.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
@@ -73,12 +73,12 @@ export default function Popup() {
           </AccordionSummary>
           <AccordionDetails className="flex">
             <TextField
-              id="base-slack-url-textfield"
+              id="client-base-url-textfield"
               label="https://app.slack.com/client/*********/"
               variant="outlined"
               sx={{ width: "100%" }}
-              value={baseSlackUrl}
-              onChange={(e) => setBaseSlackUrl(e.target.value)}
+              value={clientBaseSlackUrl}
+              onChange={(e) => setClientBaseSlackUrl(e.target.value)}
             />
             <Button
               variant="contained"
