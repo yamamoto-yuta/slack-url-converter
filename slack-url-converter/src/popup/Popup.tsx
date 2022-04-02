@@ -10,12 +10,16 @@ export default function Popup() {
   const [baseSlackUrl, setBaseSlackUrl] = React.useState("");
 
   const onClickApply = () => {
-    console.log("Apply");
+    chrome.storage.sync.set({ 'baseSlackUrl': baseSlackUrl });
   };
 
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
     chrome.runtime.sendMessage({ popupMounted: true });
+
+    chrome.storage.sync.get(['baseSlackUrl'], (result) => {
+      setBaseSlackUrl(result.baseSlackUrl);
+    });
   }, []);
 
   return (
