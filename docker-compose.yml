@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  app:
+    image: node:14.15.1
+    container_name: slack-url-converter
+    environment:
+      TZ: Asia/Tokyo
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "3000:3000"
+    tty: true
