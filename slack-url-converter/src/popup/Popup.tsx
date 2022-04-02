@@ -1,6 +1,6 @@
 import { faArrowDown, faArrowsRotate, faChevronDown, faCopy, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion, AccordionDetails, AccordionSummary, Button, TextField, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, TextField, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import "./Popup.scss";
 
@@ -48,7 +48,9 @@ export default function Popup() {
         </Button>
       </div>
 
-      <hr />
+      <Divider
+        sx={{ my: 2 }}
+      />
 
       <div>
         <Accordion
