@@ -5,6 +5,9 @@ import React, { useEffect } from "react";
 import "./Popup.scss";
 
 export default function Popup() {
+  const [workspaceIdUrl, setWorkspaceIdUrl] = React.useState("");
+  const [appSlackUrl, setAppSlackUrl] = React.useState("");
+
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
     chrome.runtime.sendMessage({ popupMounted: true });
@@ -18,6 +21,8 @@ export default function Popup() {
           label="<workspace_id>.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
+          value={workspaceIdUrl}
+          onChange={(e) => setWorkspaceIdUrl(e.target.value)}
         />
         <Button
           variant="contained">
@@ -33,6 +38,8 @@ export default function Popup() {
           label="app.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
+          value={appSlackUrl}
+          onChange={(e) => setAppSlackUrl(e.target.value)}
         />
         <Button
           variant="contained">
