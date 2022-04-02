@@ -1,3 +1,4 @@
+import { TextField } from "@mui/material";
 import React, { useEffect } from "react";
 import "./Popup.scss";
 
@@ -7,5 +8,14 @@ export default function Popup() {
     chrome.runtime.sendMessage({ popupMounted: true });
   }, []);
 
-  return <div className="popupContainer">Hello, world!</div>;
+  return (
+    <div className="popupContainer">
+      <TextField
+        id="workspace-id-slack-com"
+        label="<workspace_id>.slack.com"
+        variant="outlined"
+        sx={{ width: "100%" }}
+      />
+    </div>
+  );
 }
