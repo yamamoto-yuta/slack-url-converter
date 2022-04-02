@@ -9,6 +9,10 @@ export default function Popup() {
   const [appSlackUrl, setAppSlackUrl] = React.useState("");
   const [baseSlackUrl, setBaseSlackUrl] = React.useState("");
 
+  const onClickApply = () => {
+    console.log("Apply");
+  };
+
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
     chrome.runtime.sendMessage({ popupMounted: true });
@@ -73,7 +77,9 @@ export default function Popup() {
               onChange={(e) => setBaseSlackUrl(e.target.value)}
             />
             <Button
-              variant="contained">
+              variant="contained"
+              onClick={onClickApply}
+            >
               Apply
             </Button>
           </AccordionDetails>
