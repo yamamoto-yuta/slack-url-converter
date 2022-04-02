@@ -1,12 +1,13 @@
-import { faArrowDown, faArrowsRotate, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowsRotate, faChevronDown, faCopy, faGear } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, TextField } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import "./Popup.scss";
 
 export default function Popup() {
   const [workspaceIdUrl, setWorkspaceIdUrl] = React.useState("");
   const [appSlackUrl, setAppSlackUrl] = React.useState("");
+  const [baseSlackUrl, setBaseSlackUrl] = React.useState("");
 
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
@@ -45,6 +46,36 @@ export default function Popup() {
           variant="contained">
           <FontAwesomeIcon icon={faCopy} />
         </Button>
+      </div>
+
+      <hr />
+
+      <div>
+        <Accordion
+          sx={{ width: "100%" }}
+        >
+          <AccordionSummary
+            expandIcon={<FontAwesomeIcon icon={faChevronDown} />}
+          >
+            <Typography>
+              <FontAwesomeIcon icon={faGear} /> Settings
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails className="flex">
+            <TextField
+              id="base-slack-url-textfield"
+              label="https://app.slack.com/client/*********/"
+              variant="outlined"
+              sx={{ width: "100%" }}
+              value={baseSlackUrl}
+              onChange={(e) => setBaseSlackUrl(e.target.value)}
+            />
+            <Button
+              variant="contained">
+              Apply
+            </Button>
+          </AccordionDetails>
+        </Accordion>
       </div>
     </div>
   );
