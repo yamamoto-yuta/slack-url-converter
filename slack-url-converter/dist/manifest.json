@@ -3,15 +3,12 @@
     "name": "Slack URL Converter",
     "description": "Convert Slack URL: `<workspace_id>.slack.com` -> `app.slack.com`",
     "version": "1.0.0",
-    "browser_action": {
+    "action": {
         "default_icon": "icon16.png",
         "default_popup": "popup.html"
     },
     "background": {
-        "scripts": [
-            "js/eventPage.js"
-        ],
-        "persistent": false
+        "service_worker": "js/eventPage.js"
     },
     "icons": {
         "16": "icon16.png",
