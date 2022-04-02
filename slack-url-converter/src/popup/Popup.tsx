@@ -8,18 +8,26 @@ export default function Popup() {
   const [workspaceIdUrl, setWorkspaceIdUrl] = React.useState("");
   const [appSlackUrl, setAppSlackUrl] = React.useState("");
   const [clientBaseSlackUrl, setClientBaseSlackUrl] = React.useState("");
+  const [workspaceBaseSlackUrl, setWorkspaceBaseSlackUrl] = React.useState("");
 
   const onClickApply = () => {
-    chrome.storage.sync.set({ 'clientBaseSlackUrl': clientBaseSlackUrl });
+    chrome.storage.sync.set({
+      'clientBaseSlackUrl': clientBaseSlackUrl,
+      'workspaceBaseSlackUrl': workspaceBaseSlackUrl
+    });
   };
 
   useEffect(() => {
     // Example of how to send a message to eventPage.ts.
     chrome.runtime.sendMessage({ popupMounted: true });
 
-    chrome.storage.sync.get(['clientBaseSlackUrl'], (result) => {
-      setClientBaseSlackUrl(result.clientBaseSlackUrl);
-    });
+    chrome.storage.sync.get(
+      ['clientBaseSlackUrl', 'workspaceBaseSlackUrl'],
+      (result) => {
+        setClientBaseSlackUrl(result.clientBaseSlackUrl);
+        setWorkspaceBaseSlackUrl(result.workspaceBaseSlackUrl);
+      }
+    );
   }, []);
 
   return (
@@ -27,7 +35,7 @@ export default function Popup() {
       <div className="flex">
         <TextField
           id="workspace-url-textfield"
-          label="<workspace_id>.slack.com"
+          label="<workspaceId>.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
           value={workspaceIdUrl}
@@ -71,21 +79,36 @@ export default function Popup() {
               <FontAwesomeIcon icon={faGear} /> Settings
             </Typography>
           </AccordionSummary>
-          <AccordionDetails className="flex">
-            <TextField
-              id="client-base-url-textfield"
-              label="https://app.slack.com/client/*********/"
-              variant="outlined"
-              sx={{ width: "100%" }}
-              value={clientBaseSlackUrl}
-              onChange={(e) => setClientBaseSlackUrl(e.target.value)}
-            />
-            <Button
-              variant="contained"
-              onClick={onClickApply}
-            >
-              Apply
-            </Button>
+          <AccordionDetails>
+            <div>
+              <TextField
+                id="client-base-url-textfield"
+                label="https://app.slack.com/client/*********/"
+                variant="outlined"
+                sx={{ width: "100%", my: 1 }}
+                value={clientBaseSlackUrl}
+                onChange={(e) => setClientBaseSlackUrl(e.target.value)}
+              />
+            </div>
+            <div>
+              <TextField
+                id="workspace-base-url-textfield"
+                label="https://<workspaceId>.slack.com/archives/***********/"
+                variant="outlined"
+                sx={{ width: "100%", my: 1 }}
+                value={workspaceBaseSlackUrl}
+                onChange={(e) => setWorkspaceBaseSlackUrl(e.target.value)}
+              />
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                onClick={onClickApply}
+                sx={{ my: 1 }}
+              >
+                Apply
+              </Button>
+            </div>
           </AccordionDetails>
         </Accordion>
       </div>
