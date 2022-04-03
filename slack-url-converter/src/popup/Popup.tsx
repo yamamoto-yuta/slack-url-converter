@@ -6,8 +6,8 @@ import "./Popup.scss";
 import { convertWorkspaceUrlToClientUrl } from "./utils";
 
 export default function Popup() {
-  const [workspaceIdUrl, setWorkspaceIdUrl] = React.useState("");
-  const [appSlackUrl, setAppSlackUrl] = React.useState("");
+  const [workspaceUrl, setWorkspaceUrl] = React.useState("");
+  const [clientUrl, setClientUrl] = React.useState("");
   const [clientBaseSlackUrl, setClientBaseSlackUrl] = React.useState("");
   const [workspaceBaseSlackUrl, setWorkspaceBaseSlackUrl] = React.useState("");
 
@@ -15,9 +15,9 @@ export default function Popup() {
     const converted_url = convertWorkspaceUrlToClientUrl(
       workspaceBaseSlackUrl,
       clientBaseSlackUrl,
-      workspaceIdUrl
+      workspaceUrl
     );
-    setAppSlackUrl(converted_url);
+    setClientUrl(converted_url);
   };
 
   const onClickApply = () => {
@@ -48,8 +48,8 @@ export default function Popup() {
           label="<workspaceId>.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
-          value={workspaceIdUrl}
-          onChange={(e) => setWorkspaceIdUrl(e.target.value)}
+          value={workspaceUrl}
+          onChange={(e) => setWorkspaceUrl(e.target.value)}
         />
         <Button
           variant="contained"
@@ -67,8 +67,8 @@ export default function Popup() {
           label="app.slack.com"
           variant="outlined"
           sx={{ width: "100%" }}
-          value={appSlackUrl}
-          onChange={(e) => setAppSlackUrl(e.target.value)}
+          value={clientUrl}
+          onChange={(e) => setClientUrl(e.target.value)}
         />
         <Button
           variant="contained">
