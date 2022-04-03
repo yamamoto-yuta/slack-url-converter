@@ -3,13 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, TextField, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import "./Popup.scss";
-import { convertWorkspaceUrlToClientUrl } from "./utils";
+import { CLIENT_BASE_URL_PATTERN, convertWorkspaceUrlToClientUrl, WORKSPACE_BASE_URL_PATTERN } from "./utils";
 
 export default function Popup() {
+
   const [workspaceUrl, setWorkspaceUrl] = React.useState("");
   const [clientUrl, setClientUrl] = React.useState("");
+
   const [clientBaseSlackUrl, setClientBaseSlackUrl] = React.useState("");
   const [workspaceBaseSlackUrl, setWorkspaceBaseSlackUrl] = React.useState("");
+
+  const inputRefClientBaseUrl = React.useRef(null);
+
+  const [isClientBaseUrlValid, setIsClientBaseUrlValid] = React.useState(false);
 
   const onClickConvert = () => {
     const converted_url = convertWorkspaceUrlToClientUrl(
@@ -28,7 +34,19 @@ export default function Popup() {
       );
   };
 
-  const onClickApply = () => {
+  const onChangeClientBaseUrlTextField = (inputUrl: string) => {
+    setClientBaseSlackUrl(inputUrl);
+    if (inputRefClientBaseUrl.current) {
+      const ref = inputRefClientBaseUrl.current;
+      if (ref.validity.valid) {
+        setIsClientBaseUrlValid(true);
+      } else {
+        setIsClientBaseUrlValid(false);
+      }
+    }
+  };
+
+  const onClickApplyButton = () => {
     chrome.storage.sync.set({
       'clientBaseSlackUrl': clientBaseSlackUrl,
       'workspaceBaseSlackUrl': workspaceBaseSlackUrl
@@ -44,6 +62,7 @@ export default function Popup() {
       (result) => {
         setClientBaseSlackUrl(result.clientBaseSlackUrl);
         setWorkspaceBaseSlackUrl(result.workspaceBaseSlackUrl);
+        onChangeClientBaseUrlTextField(result.clientBaseSlackUrl);
       }
     );
   }, []);
@@ -109,7 +128,12 @@ export default function Popup() {
                 variant="outlined"
                 sx={{ width: "100%", my: 1 }}
                 value={clientBaseSlackUrl}
-                onChange={(e) => setClientBaseSlackUrl(e.target.value)}
+                onChange={(e) => onChangeClientBaseUrlTextField(e.target.value)}
+                required
+                inputProps={{ pattern: CLIENT_BASE_URL_PATTERN }}
+                inputRef={inputRefClientBaseUrl}
+                helperText={inputRefClientBaseUrl?.current?.validationMessage}
+                error={!isClientBaseUrlValid}
               />
             </div>
             <div>
@@ -125,8 +149,9 @@ export default function Popup() {
             <div>
               <Button
                 variant="contained"
-                onClick={onClickApply}
+                onClick={onClickApplyButton}
                 sx={{ my: 1 }}
+                disabled={!isClientBaseUrlValid}
               >
                 Apply
               </Button>
