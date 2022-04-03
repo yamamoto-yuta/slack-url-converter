@@ -10,17 +10,19 @@ export default function Popup() {
   const [workspaceUrl, setWorkspaceUrl] = React.useState("");
   const [clientUrl, setClientUrl] = React.useState("");
 
-  const [clientBaseSlackUrl, setClientBaseSlackUrl] = React.useState("");
-  const [workspaceBaseSlackUrl, setWorkspaceBaseSlackUrl] = React.useState("");
+  const [clientBaseUrl, setClientBaseUrl] = React.useState("");
+  const [workspaceBaseUrl, setWorkspaceBaseUrl] = React.useState("");
 
   const inputRefClientBaseUrl = React.useRef(null);
+  const inputRefWorkspaceBaseUrl = React.useRef(null);
 
   const [isClientBaseUrlValid, setIsClientBaseUrlValid] = React.useState(false);
+  const [isWorkspaceBaseUrlValid, setIsWorkspaceBaseUrlValid] = React.useState(false);
 
   const onClickConvert = () => {
     const converted_url = convertWorkspaceUrlToClientUrl(
-      workspaceBaseSlackUrl,
-      clientBaseSlackUrl,
+      workspaceBaseUrl,
+      clientBaseUrl,
       workspaceUrl
     );
     setClientUrl(converted_url);
@@ -35,7 +37,7 @@ export default function Popup() {
   };
 
   const onChangeClientBaseUrlTextField = (inputUrl: string) => {
-    setClientBaseSlackUrl(inputUrl);
+    setClientBaseUrl(inputUrl);
     if (inputRefClientBaseUrl.current) {
       const ref = inputRefClientBaseUrl.current;
       if (ref.validity.valid) {
@@ -46,10 +48,22 @@ export default function Popup() {
     }
   };
 
+  const onChangeWorkspaceBaseUrlTextField = (inputUrl: string) => {
+    setWorkspaceBaseUrl(inputUrl);
+    if (inputRefWorkspaceBaseUrl.current) {
+      const ref = inputRefWorkspaceBaseUrl.current;
+      if (ref.validity.valid) {
+        setIsWorkspaceBaseUrlValid(true);
+      } else {
+        setIsWorkspaceBaseUrlValid(false);
+      }
+    }
+  };
+
   const onClickApplyButton = () => {
     chrome.storage.sync.set({
-      'clientBaseSlackUrl': clientBaseSlackUrl,
-      'workspaceBaseSlackUrl': workspaceBaseSlackUrl
+      'clientBaseUrl': clientBaseUrl,
+      'workspaceBaseUrl': workspaceBaseUrl
     });
   };
 
@@ -58,11 +72,12 @@ export default function Popup() {
     chrome.runtime.sendMessage({ popupMounted: true });
 
     chrome.storage.sync.get(
-      ['clientBaseSlackUrl', 'workspaceBaseSlackUrl'],
+      ['clientBaseUrl', 'workspaceBaseUrl'],
       (result) => {
-        setClientBaseSlackUrl(result.clientBaseSlackUrl);
-        setWorkspaceBaseSlackUrl(result.workspaceBaseSlackUrl);
-        onChangeClientBaseUrlTextField(result.clientBaseSlackUrl);
+        setClientBaseUrl(result.clientBaseUrl);
+        setWorkspaceBaseUrl(result.workspaceBaseUrl);
+        onChangeClientBaseUrlTextField(result.clientBaseUrl);
+        onChangeWorkspaceBaseUrlTextField(result.workspaceBaseUrl);
       }
     );
   }, []);
@@ -127,7 +142,7 @@ export default function Popup() {
                 label="https://app.slack.com/client/*********/"
                 variant="outlined"
                 sx={{ width: "100%", my: 1 }}
-                value={clientBaseSlackUrl}
+                value={clientBaseUrl}
                 onChange={(e) => onChangeClientBaseUrlTextField(e.target.value)}
                 required
                 inputProps={{ pattern: CLIENT_BASE_URL_PATTERN }}
@@ -142,8 +157,13 @@ export default function Popup() {
                 label="https://<workspaceId>.slack.com/archives/***********/"
                 variant="outlined"
                 sx={{ width: "100%", my: 1 }}
-                value={workspaceBaseSlackUrl}
-                onChange={(e) => setWorkspaceBaseSlackUrl(e.target.value)}
+                value={workspaceBaseUrl}
+                onChange={(e) => onChangeWorkspaceBaseUrlTextField(e.target.value)}
+                required
+                inputProps={{ pattern: WORKSPACE_BASE_URL_PATTERN }}
+                inputRef={inputRefWorkspaceBaseUrl}
+                helperText={inputRefClientBaseUrl?.current?.validationMessage}
+                error={!isWorkspaceBaseUrlValid}
               />
             </div>
             <div>
@@ -151,7 +171,7 @@ export default function Popup() {
                 variant="contained"
                 onClick={onClickApplyButton}
                 sx={{ my: 1 }}
-                disabled={!isClientBaseUrlValid}
+                disabled={!isClientBaseUrlValid && !isWorkspaceBaseUrlValid}
               >
                 Apply
               </Button>
