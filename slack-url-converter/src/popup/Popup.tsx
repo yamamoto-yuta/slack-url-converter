@@ -10,6 +10,10 @@ export default function Popup() {
   const [clientBaseSlackUrl, setClientBaseSlackUrl] = React.useState("");
   const [workspaceBaseSlackUrl, setWorkspaceBaseSlackUrl] = React.useState("");
 
+  const onClickConvert = () => {
+    console.log("onClickConvert");
+  };
+
   const onClickApply = () => {
     chrome.storage.sync.set({
       'clientBaseSlackUrl': clientBaseSlackUrl,
@@ -42,7 +46,9 @@ export default function Popup() {
           onChange={(e) => setWorkspaceIdUrl(e.target.value)}
         />
         <Button
-          variant="contained">
+          variant="contained"
+          onClick={onClickConvert}
+        >
           <FontAwesomeIcon icon={faArrowsRotate} />
         </Button>
       </div>
