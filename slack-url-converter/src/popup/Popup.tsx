@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Accordion, AccordionDetails, AccordionSummary, Button, Divider, TextField, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import "./Popup.scss";
+import { convertWorkspaceUrlToClientUrl } from "./utils";
 
 export default function Popup() {
   const [workspaceIdUrl, setWorkspaceIdUrl] = React.useState("");
@@ -11,7 +12,12 @@ export default function Popup() {
   const [workspaceBaseSlackUrl, setWorkspaceBaseSlackUrl] = React.useState("");
 
   const onClickConvert = () => {
-    console.log("onClickConvert");
+    const converted_url = convertWorkspaceUrlToClientUrl(
+      workspaceBaseSlackUrl,
+      clientBaseSlackUrl,
+      workspaceIdUrl
+    );
+    setAppSlackUrl(converted_url);
   };
 
   const onClickApply = () => {
