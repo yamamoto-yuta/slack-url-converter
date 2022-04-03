@@ -154,7 +154,7 @@ export default function Popup() {
             <div>
               <TextField
                 id="workspace-base-url-textfield"
-                label="https://<workspaceId>.slack.com/archives/***********/"
+                label="https://<workspaceId>.slack.com/"
                 variant="outlined"
                 sx={{ width: "100%", my: 1 }}
                 value={workspaceBaseUrl}
