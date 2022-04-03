@@ -1,10 +1,6 @@
 const CHANNEL_ID_PATTERN = "[A-Z0-9]+";
-const channelIdRegex = new RegExp(CHANNEL_ID_PATTERN);
-
 const WORKSPACE_MESSAGE_ID_PATTERN = "p[0-9]{16}";
-
 const CLIENT_MESSAGE_ID_PATTERN = "[0-9]{10}.[0-9]{6}";
-const clientMessageIdRegex = new RegExp(CLIENT_MESSAGE_ID_PATTERN);
 
 const WORKSPACE_URL_PATTERN = "^https://[a-z0-9]+[a-z0-9\-]+.slack.com/";
 const CLIENT_URL_PATTERN = `^https://app.slack.com/client/${CHANNEL_ID_PATTERN}/`
