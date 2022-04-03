@@ -20,6 +20,14 @@ export default function Popup() {
     setClientUrl(converted_url);
   };
 
+  const onClickCopy = () => {
+    navigator.clipboard.writeText(clientUrl)
+      .then(
+        () => { },
+        (err) => { console.error("Failed to copy to clipboard", err) }
+      );
+  };
+
   const onClickApply = () => {
     chrome.storage.sync.set({
       'clientBaseSlackUrl': clientBaseSlackUrl,
@@ -71,7 +79,9 @@ export default function Popup() {
           onChange={(e) => setClientUrl(e.target.value)}
         />
         <Button
-          variant="contained">
+          variant="contained"
+          onClick={onClickCopy}
+        >
           <FontAwesomeIcon icon={faCopy} />
         </Button>
       </div>
